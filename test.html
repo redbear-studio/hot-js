@@ -1,0 +1,106 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+        <script src="./hot.js"></script>
+        <style>
+            .show {
+                border: 2px solid gray;
+            }
+
+            .hide {
+                color: red;
+            }
+
+            .awe {
+                background-color: red;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .tab1-bg {
+                background-color: coral;
+            }
+
+            .tab2-bg {
+                background-color: green;
+            }
+            
+            .active {
+                background-color: coral;
+            }
+
+            .inactive {
+                background-color: yellow;
+            }
+        </style>
+    </head>
+<body>
+    <div>
+        <h2>Realtime updates...</h2>
+        <input data-subscribe="sample" oninput="search(this.value)" data-val="{{sample}}" placeholder="This input updates 'input'"></input>
+        <p data-subscribe="sample" data-html="{{sample}}"></p>
+
+        <div>
+            <button data-subscribe="activeTab" data-class="{{activeTab == 'tab1' ? 'active' : 'inactive'}}" onclick="toggleTab('tab1')">Tab 1</button>
+            <button data-subscribe="activeTab" data-class="{{activeTab == 'tab2' ? 'active' : 'inactive'}}" onclick="toggleTab('tab2')">Tab 2</button>
+        </div>
+        <div>
+            <div data-subscribe="activeTab" data-class="tab1-bg {{activeTab == 'tab1' ? 'show' : 'hidden'}}">
+                <h2>This is the first tab!!</h2>
+                <hr/>
+            </div>
+
+            <div data-subscribe="activeTab" data-class="tab2-bg {{activeTab == 'tab2' ? 'show' : 'hidden'}}">
+                <h2>Hello there</h2>
+                <hr/>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-subscribe="loop_items" data-loop="loop_items">
+                    <td data-html="{{_i.title}}"></td>
+                    <td data-html="{{_i.name}}"></td>
+                    <td data-html="{{_i.surname}}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    const toggleTab = (tab) => {
+        $.setState({ activeTab: tab })
+    }
+
+    const search = (val) => {
+        $.setState({ sample:  val })
+    }
+
+    $(function() {
+        $.initState({
+            sample: "",
+            activeTab: "tab1",
+            loop_items: []
+        })
+        
+        setTimeout(() => {
+            $.setState({ loop_items: [
+                {
+                    title: 'Mr',
+                    name: 'John',
+                    surname: 'Doe'
+                }
+            ]})
+        }, 5000)
+    })
+</script>
+</html>
